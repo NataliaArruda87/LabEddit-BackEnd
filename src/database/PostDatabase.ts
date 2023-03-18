@@ -160,7 +160,5 @@ export class PostDatabase extends BaseDatabase {
             usersDB,
             commentsDB    
         }
-    }
-
-    
+    } 
 }

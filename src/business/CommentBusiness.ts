@@ -1,13 +1,14 @@
 import { CommentDatabase } from "../database/CommentDatabase"
 import { PostDatabase } from "../database/PostDatabase"
 import { UserDatabase } from "../database/UserDatabase"
-import { createCommentInput, CreateCommentOutput, DeleteCommentInput, DeleteCommentOutput, EditCommentInput, EditCommentOutput, GetPostsWithCommentInput, LikeDislikeCommentInput } from "../dtos/commentDTO"
+import { createCommentInput, CreateCommentOutput, DeleteCommentInput, DeleteCommentOutput, EditCommentInput, EditCommentOutput, LikeDislikeCommentInput } from "../dtos/commentDTO"
 import { BadRequestError } from "../errors/BadRequestError"
 import { NotFoundError } from "../errors/NotFoundError"
 import { Comment } from "../models/Comment"
+import { Post } from "../models/Post"
 import { IdGenerator } from "../services/IdGenerator"
 import { TokenManager } from "../services/TokenManager"
-import { CommentDB, LikeDislikeComentDB, USER_ROLES } from "../types"
+import { CommentDB, LikeDislikeComentDB, PostDB, USER_ROLES } from "../types"
 
 export class CommentBusiness {
     constructor(
@@ -67,6 +68,32 @@ export class CommentBusiness {
 
         const newCommentDB = newComment. toCommentDBModel()
         await this.commentDatabase.insertComment(newCommentDB)
+
+        const postDB: PostDB | undefined = await this.postDatabase.findById(post_id)
+
+        if (!postDB) {
+            throw new NotFoundError("Post não encontrado")
+        }
+
+        const userDB = await this.userDataBase.getUsersById(postDB.creator_id)
+        if (!userDB) {
+            throw new NotFoundError("Erro ao procurar Id do criador do post")
+        }
+
+        const postToUpdate = new Post( 
+            postDB.id,
+            postDB.content,
+            postDB.likes,
+            postDB.dislikes,
+            postDB.created_at,
+            postDB.updated_at,
+            postDB.qte_comments+1,
+            userDB
+
+        )
+
+        const postToUpdateDB = postToUpdate.toDBModel()
+        await this.postDatabase.updatePost(postDB.id, postToUpdateDB)
         
         const output: CreateCommentOutput = {
             message: "Cmentario criado com sucesso",
@@ -164,6 +191,41 @@ export class CommentBusiness {
         }
 
         await this.commentDatabase.deleteComment(idCommentToDelete)
+
+        const postDB: PostDB | undefined = await this.postDatabase.findById(commentDB.post_id)
+
+        if (!postDB) {
+            throw new NotFoundError("Post não encontrado")
+        }
+
+        const userDB = await this.userDataBase.getUsersById(postDB.creator_id)
+        
+        if (!userDB) {
+            throw new NotFoundError("Erro ao procurar Id do criador do post")
+        }
+
+        function updateQteComments() {
+            if (postDB.qte_comments > 0) {
+                return postDB.qte_comments-1
+            } else {
+                return postDB.qte_comments=0
+            }
+        }
+
+        const postToUpdate = new Post( 
+            postDB.id,
+            postDB.content,
+            postDB.likes,
+            postDB.dislikes,
+            postDB.created_at,
+            postDB.updated_at,
+            updateQteComments(),
+            userDB
+        )
+
+        const postToUpdateDB = postToUpdate.toDBModel()
+        await this.postDatabase.updatePost(postDB.id, postToUpdateDB)
+        
 
         const output: DeleteCommentOutput = {
             message: "Comentario deletado com sucesso"

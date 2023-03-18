@@ -137,7 +137,7 @@ WHERE id = "p002";
 
 UPDATE posts
 set qte_comments = 1
-WHERE id = "p00";
+WHERE id = "p003";
 
 SELECT * FROM users;
 

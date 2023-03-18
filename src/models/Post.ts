@@ -1,4 +1,4 @@
-import { PostDB, PostModel, PostWithCommentsDB } from "../types";
+import { PostDB, PostModel } from "../types";
 
 export class Post {
     constructor(
@@ -127,7 +127,5 @@ export class Post {
     }) {
         this.creator = value;
     }
-
-
 
 }
