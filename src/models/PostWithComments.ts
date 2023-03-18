@@ -142,8 +142,6 @@ export class PostWithComments {
         name: string
     }) {
         this.creator = value;
-    }
-
-    
+    }  
 
 }
