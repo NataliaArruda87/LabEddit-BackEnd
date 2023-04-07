@@ -297,7 +297,7 @@ export class PostBusiness {
             throw new BadRequestError("'like' deve ser booleano")
         }
 
-        const postWithCreatorDB = await this.postDatabase.findPostWithCreatorById(idToLikeDislike)
+        const postWithCreatorDB = await this.postDatabase.findById(idToLikeDislike)
 
         if (!postWithCreatorDB) {
             throw new NotFoundError("'id' não encontrado")
@@ -321,8 +321,10 @@ export class PostBusiness {
             postWithCreatorDB.created_at,
             postWithCreatorDB.updated_at,
             postWithCreatorDB.qte_comments,
-            payload 
-            )
+            {id: postWithCreatorDB.creator_id, name: ""}
+            
+           
+        )
 
         const posLikeDislikeExists = await this.postDatabase.findLikeDislike(likeDislike)
 

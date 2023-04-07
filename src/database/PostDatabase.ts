@@ -1,4 +1,4 @@
-import { LikeDislikeDB, PostDB, PoststWithCreatorDB } from "../types";
+import { LikeDislikeDB, PostDB, PostModel, PoststWithCreatorDB } from "../types";
 import { BaseDatabase } from "./BaseDatabase";
 import { UserDatabase } from "./UserDatabase";
 
@@ -100,6 +100,7 @@ export class PostDatabase extends BaseDatabase {
         
         return result[0]
     }
+
 
     public findLikeDislike = async (likeDislike: LikeDislikeDB): Promise<"já deu like" | "já deu dislike" | null> => {
         const [ likeDislikeDB ]: LikeDislikeDB[] = await BaseDatabase
