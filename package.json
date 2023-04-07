@@ -1,7 +1,7 @@
 {
-  "name": "labook",
+  "name": "labeddit",
   "version": "1.0.0",
-  "description": "projeto Labook",
+  "description": "projeto LabEddit",
   "main": "index.js",
   "scripts": {
     "start": "node ./build/index.js",
@@ -10,15 +10,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/NataliaArruda87/Labook.git"
+    "url": "git+https://github.com/NataliaArruda87/LabEddit-BackEnd.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/NataliaArruda87/Labook/issues"
+    "url": "https://github.com/NataliaArruda87/LabEddit-BackEnd/issues"
   },
-  "homepage": "https://github.com/NataliaArruda87/Labook#readme",
+  "homepage": "https://github.com/NataliaArruda87/LabEddit-BackEnd#readme",
   "devDependencies": {
     "@types/bcryptjs": "^2.4.2",
     "@types/cors": "^2.8.13",
